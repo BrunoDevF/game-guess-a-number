@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAME GUESS A NUMBER</title>
+    <style>
+        button{
+            display: block;
+        }
+        input{
+            display: block;
+        }
+        #palpiteAnterior {
+            display: block;
+        }
+        
+    </style>
+</head>
+<body>
+    <div>
+        <h2>Jogo de adivinhe um numero</h2>
+        <p>Selecionamos um número aleatório entre 1 e 100. Veja se consegue adivinhar em 10 chances ou menos. Lhe diremos se seu palpite está com valor alto ou baixo.</p>
+    </div>
+    <div id="palpites">
+        <label style="display: block;">Digite seu palpite</label>
+        <input type="text" id="palpite">
+        <button id="enviar">Enviar</button>
+    </div>
+    <div>
+        <div id="palpiteAnterior">
+
+        </div>
+    </div>
+    <div>
+        <p id="result">
+
+        </p>
+    </div>
+
+<script> 
+    
+
+    var contagensPalpites = 0;
+    var palpite = document.getElementById('palpite');
+    var label = document.querySelector('label');
+    var button = document.querySelector('button');
+    
+    var palpiteAnterior = document.getElementById('palpiteAnterior');
+    var result = document.getElementById('result');
+
+    var numAleatorio = Math.floor(Math.random() * 100) + 1;
+   
+
+    function configFimDeJogo() {
+        label.style.display = "none";
+        button.style.display = "none";
+        palpite.style.display = "none";
+        palpiteAnterior.style.display = "none";
+        palpiteAnterior.textContent = '';
+
+        result.textContent = 'Suas chances acabaram!';
+        buttonReiniciar = document.createElement('button');
+        buttonReiniciar.setAttribute('id','reiniciar');
+        buttonReiniciar.textContent = 'Iniciar novo jogo';
+        document.body.appendChild(buttonReiniciar);
+        
+
+        buttonReiniciar.addEventListener('click', () => {
+            result.textContent = '';
+            label.style.display = "block";
+            button.style.display = "block";
+            palpite.style.display = "block";
+            palpiteAnterior.style.display = "block";
+            document.getElementById('reiniciar').remove();
+
+            if(contagensPalpites === 0){ palpiteAnterior.textContent = 'Palpite anterior: ' }
+        });
+    }
+
+    function reiniciarJogo() {
+        button.style.display = "block";
+        palpite.style.display = "block";
+        palpiteAnterior.style.display = "block";
+    }
+    
+    
+    
+    function conferirPalpite(){
+        
+
+        if(contagensPalpites === 0){ palpiteAnterior.textContent = 'Palpite anterior: ' }
+        
+        palpiteAnterior.textContent += palpite.value + ' | ';
+        if( palpite.value == numAleatorio ) {
+            //Resetar e deixar inacessivel os demais campos
+            result.textContent = 'Resposta CERTA! PARABENS!';
+        }else if ( palpite.value < numAleatorio ) {
+            result.textContent = 'Está FRIO';
+        }else if ( palpite.value > numAleatorio ) {
+            result.textContent = 'Está QUENTE';
+        }
+        
+        if(contagensPalpites == 10){
+            contagensPalpites = 0;
+            configFimDeJogo();
+            
+        }
+
+
+
+
+        contagensPalpites++;
+        
+        palpite.value = '';
+        palpite.focus();
+        //console.log(numAleatorio);
+        console.log(contagensPalpites);
+    }
+    
+
+
+    button.addEventListener('click', () => {
+        if( palpite.value == ''){
+            alert('Ops! Você tem que colocar seu palpite!');
+        }else {
+            
+            conferirPalpite()
+        }
+    })
+</script>
+</body>
+</html>
